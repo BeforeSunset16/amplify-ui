@@ -1,5 +1,12 @@
 # @aws-amplify/ui-react-geo
 
+## 2.0.31
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @aws-amplify/ui-react-core@3.0.30
+
 ## 2.0.30
 
 ### Patch Changes
