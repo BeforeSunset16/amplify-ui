@@ -22,23 +22,30 @@ export const useCopyView = (options?: UseCopyViewOptions): CopyViewState => {
   const { current } = location;
 
   const getInput = useGetActionInput();
+  const [destination, setDestination] = useState(location);
 
-  const [processState, handleProcess] = useProcessTasks(
-    copyHandler,
-    fileDataItems,
-    { concurrency: 4 }
+  const data = React.useMemo(
+    () =>
+      fileDataItems?.map((item) => ({
+        ...item,
+        // generate new `id` on each `destination.key` change to refresh
+        // task data in `useProcessTasks`
+        id: crypto.randomUUID(),
+        key: `${destination.key}${item.fileKey}`,
+        sourceKey: item.key,
+      })),
+    [destination.key, fileDataItems]
   );
+
+  const [processState, handleProcess] = useProcessTasks(copyHandler, data, {
+    concurrency: 4,
+  });
 
   const { isProcessing, isProcessingComplete, statusCounts, tasks } =
     processState;
 
-  const [destination, setDestination] = useState(location);
-
   const onActionStart = () => {
-    handleProcess({
-      config: getInput(),
-      destinationPrefix: destination.key,
-    });
+    handleProcess({ config: getInput() });
   };
 
   const onActionCancel = () => {

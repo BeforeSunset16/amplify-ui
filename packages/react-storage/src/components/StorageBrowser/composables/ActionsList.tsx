@@ -3,7 +3,7 @@ import React from 'react';
 import { DropdownMenu } from '../components/DropdownMenu';
 import { IconVariant } from '../context/elements';
 
-export interface ActionsListItem {
+export interface ActionListItem {
   isDisabled?: boolean;
   isHidden?: boolean;
   icon?: IconVariant;
@@ -13,7 +13,7 @@ export interface ActionsListItem {
 
 export interface ActionsListProps {
   isDisabled?: boolean;
-  items: ActionsListItem[];
+  items: ActionListItem[];
   onActionSelect?: (id: string) => void;
 }
 

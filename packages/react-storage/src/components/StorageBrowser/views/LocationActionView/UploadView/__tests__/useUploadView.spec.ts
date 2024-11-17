@@ -131,7 +131,6 @@ describe('useUploadView', () => {
         region: 'region',
       },
       options: { preventOverwrite: true },
-      destinationPrefix: '',
     });
   });
   it('should call cancel on each pending task when onCancel is invoked', () => {

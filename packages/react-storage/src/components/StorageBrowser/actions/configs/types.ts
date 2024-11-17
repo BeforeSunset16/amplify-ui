@@ -33,14 +33,15 @@ export type SelectionType = LocationItemType | [LocationItemType, ...string[]];
 
 export interface ActionConfigTemplate<T> {
   /**
-   * The name of the component associated with the action
-   */
-  componentName: ComponentName;
-
-  /**
    * action handler
    */
   handler: T;
+
+  /**
+   * configure action list item behavior. provide multiple configs
+   * to create additional list items for a single action
+   */
+  actionListItem?: ActionListItemConfig;
 }
 
 export interface ActionListItemConfig {
@@ -76,33 +77,28 @@ export interface ActionListItemConfig {
  * defines an action to be included in the actions list of the `LocationDetailView` with
  * a dedicated subcomponent of the `LocationActionView`
  */
-export interface TaskActionConfig<T extends TaskHandler = TaskHandler>
-  extends ActionConfigTemplate<T> {
+export interface TaskActionConfig<
+  T extends TaskHandler = TaskHandler,
+  K extends ComponentName = ComponentName,
+> extends ActionConfigTemplate<T> {
+  /**
+   * The name of the component associated with the action
+   */
+  viewName?: K;
+
   /**
    * configure action list item behavior. provide multiple configs
    * to create additional list items for a single action
    */
-  actionsListItemConfig?: ActionListItemConfig;
-
-  /**
-   * whether the provided `handler` allow inflight cancellation
-   * @default false
-   */
-  isCancelable?: boolean;
-
-  /**
-   * show per task progress in the action task table
-   * @default false
-   */
-  includeProgress?: boolean;
-
-  /**
-   * default display name value displayed on action view
-   */
-  displayName: string;
+  actionListItem?: ActionListItemConfig;
 }
 
-export interface ListActionConfig<T> extends ActionConfigTemplate<T> {}
+export interface ListActionConfig<T> {
+  /**
+   * action handler
+   */
+  handler: T;
+}
 
 export interface UploadActionConfig extends TaskActionConfig<UploadHandler> {
   componentName: 'UploadView';
@@ -124,16 +120,11 @@ export interface CreateFolderActionConfig
 export interface ListLocationsActionConfig
   extends ListActionConfig<ListLocationsHandler> {
   componentName: 'LocationsView';
-  displayName: string;
 }
 
 export interface ListLocationItemsActionConfig
   extends ListActionConfig<ListLocationItemsHandler> {
   componentName: 'LocationDetailView';
-  displayName: (
-    bucket: string | undefined,
-    prefix: string | undefined
-  ) => string;
 }
 
 export interface DefaultActionConfigs {
@@ -143,6 +134,14 @@ export interface DefaultActionConfigs {
   Upload: UploadActionConfig;
   Delete: DeleteActionConfig;
   Copy: CopyActionConfig;
+}
+
+export interface Default_ActionConfigs {
+  listLocationItems: ListLocationItemsHandler;
+  createFolder: CreateFolderActionConfig;
+  upload: UploadActionConfig;
+  delete: DeleteActionConfig;
+  copy: CopyActionConfig;
 }
 
 export type DefaultActionKey = keyof DefaultActionConfigs;

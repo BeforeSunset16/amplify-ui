@@ -24,6 +24,12 @@ describe('useCopyView', () => {
     key: 'test-prefix/',
   };
 
+  beforeAll(() => {
+    Object.defineProperty(globalThis, 'crypto', {
+      value: { randomUUID: () => 'intentionally-static-test-id' },
+    });
+  });
+
   beforeEach(() => {
     jest.spyOn(Store, 'useStore').mockReturnValue([
       {
@@ -127,7 +133,6 @@ describe('useCopyView', () => {
 
     expect(mockProcessTasks).toHaveBeenCalledTimes(1);
     expect(mockProcessTasks).toHaveBeenCalledWith({
-      destinationPrefix: 'test-prefix/',
       config: {
         accountId: '123456789012',
         bucket: 'XXXXXXXXXXX',

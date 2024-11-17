@@ -52,7 +52,6 @@ export function createStorageBrowser(input: CreateStorageBrowserInput): {
     accountId,
     actions: {
       ...defaultActionConfigs,
-      // @ts-expect-error To be addressed with line 40
       listLocations: {
         componentName: 'LocationsView',
         handler: input.config.listLocations,
